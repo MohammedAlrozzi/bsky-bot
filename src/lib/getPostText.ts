@@ -17,13 +17,15 @@ export default async function getPostText() {
   });
 
   const thirtyMinutesAgo = new Date(Date.now() - 30 * 60 * 1000);
-  const paginator = client.v1.userTimeline('your_username');
+  const paginator = await client.v1.userTimeline('your_username');
 
   let tweetUrls = [];
-  for await (const tweet of paginator) {
-    const tweetDate = new Date(tweet.created_at);
-    if (tweetDate > thirtyMinutesAgo && (tweet.is_quote_status || 'retweeted_status' in tweet)) {
-      tweetUrls.push(`https://twitter.com/mohammedalrozzi/status/${tweet.id_str}`);
+  for (const page of paginator.pages) {
+    for (const tweet of page) {
+      const tweetDate = new Date(tweet.created_at);
+      if (tweetDate > thirtyMinutesAgo && (tweet.is_quote_status || 'retweeted_status' in tweet)) {
+        tweetUrls.push(`https://twitter.com/mohammedalrozzi/status/${tweet.id_str}`);
+      }
     }
   }
 
