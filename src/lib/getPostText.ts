@@ -1,14 +1,16 @@
+import axios from 'axios';
+import cheerio from 'cheerio';
+
 export default async function getPostText() {
-  const url = 'https://www.aljazeera.com/news/longform/2023/10/9/israel-hamas-war-in-maps-and-charts-live-tracker?text=<at>123</Palestinians>';
-  const startTag = '<at>';
-  const endTag = '</Palestinians>';
-  
-  const startIndex = url.indexOf(startTag) + startTag.length;
-  const endIndex = url.indexOf(endTag);
-  
-  const number = url.substring(startIndex, endIndex);
-  return number
-// console.log(number); // 123
+  const url = 'https://www.aljazeera.com/news/longform/2023/10/9/israel-hamas-war-in-maps-and-charts-live-tracker';
+
+  const response = await axios.get(url);
+  const $ = cheerio.load(response.data);
+
+  // Replace the selector with the actual selector for the number you want to extract
+  const number = $('your_selector').text();
+
+  return number;
 }
 
 // export default async function getPostText() {
