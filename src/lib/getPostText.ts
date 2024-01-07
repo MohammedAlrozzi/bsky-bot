@@ -43,10 +43,10 @@ export default async function getPostText() {
   const extractedText = htmlContent.slice(startIndex, endIndex);
 
   const date = new Date();
-  const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Jerusalem' };
+  const options: any = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Jerusalem' };
   const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
 
-  const finalText = `${formattedDate}: Israel killed more than ${extractedText} Palestinians, in the last 3 months alone.`;
+  const finalText = `Gaza time (${formattedDate}): Israel killed more than ${extractedText} Palestinians, in the last 3 months alone.`;
 
   return finalText;
 }
