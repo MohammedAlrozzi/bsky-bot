@@ -15,7 +15,10 @@ export default async function getPostText() {
 
   const extractedText = htmlContent.slice(startIndex, endIndex);
 
-  return extractedText;
+  const finalText = `Israel killed more than ${extractedText} Palestinians, in the last 3 months alone.`;
+
+
+  return finalText;
 }
 // export default async function getPostText() {
 //   const options = ["From the river to the sea", "Palestine will be free", "Justice will be served", "Free Free Palestine", "what do we want? - Justice. When do we want it? - Now"]; // Add your options here
