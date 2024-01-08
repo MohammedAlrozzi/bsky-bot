@@ -19,7 +19,7 @@ export default async function getPostText() {
   const startIndex2 = htmlContent.indexOf('Israel has continued its ') + 25; // 4 is the length of ' at '
   const endIndex2 = htmlContent.indexOf(' across', startIndex2);
 
-  if (startIndex < 25 || endIndex2 === -1) {
+  if (startIndex2 < 25 || endIndex2 === -1) {
     throw new Error('Could not find the target string in the HTML content');
   }
 
