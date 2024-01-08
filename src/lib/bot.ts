@@ -82,15 +82,15 @@ export default class Bot {
   }
 
   async post(text: string) {
-    if (!this.defaultOptions.dryRun) {
+    if (!Bot.defaultOptions.dryRun) {
       return this.#twit.post('statuses/update', { status: text });
     }
   }
-
+  
   static async run(getPostText: () => Promise<string>, botOptions?: Partial<BotOptions>) {
     const { dryRun } = botOptions
-      ? Object.assign({}, this.defaultOptions, botOptions)
-      : this.defaultOptions;
+      ? Object.assign({}, Bot.defaultOptions, botOptions)
+      : Bot.defaultOptions;
     const bot = new Bot();
     const text = await getPostText();
     if (!dryRun) {
