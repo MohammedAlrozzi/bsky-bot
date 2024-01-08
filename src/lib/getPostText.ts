@@ -31,7 +31,7 @@ export default async function getPostText() {
   const options: any = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Jerusalem' };
   const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
 
-  const finalText = `-- ${formattedDate} (Gaza time):\nIsrael killed more than ${extractedText} Palestinians, in the last 3 months alone.\nThis data was last updated on ${extractedText2} Gaza time `;
+  const finalText = `-- ${formattedDate} (Gaza time):\nIsrael killed more than ${extractedText} Palestinians, in the last 3 months alone.\n\nThis data was last updated on ${extractedText2} Gaza time.`;
 
   return finalText;
 }
