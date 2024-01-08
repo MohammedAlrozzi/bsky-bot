@@ -82,9 +82,17 @@ export default class Bot {
   }
 
   async post(text: string) {
-    if (!Bot.defaultOptions.dryRun) {
-      return this.#twit.post('statuses/update', { status: text });
-    }
+    return new Promise((resolve, reject) => {
+      if (!Bot.defaultOptions.dryRun) {
+        this.#twit.post('statuses/update', { status: text }, (err, data, response) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(data);
+          }
+        });
+      }
+    });
   }
   
   static async run(getPostText: () => Promise<string>, botOptions?: Partial<BotOptions>) {
