@@ -71,14 +71,16 @@ export default async function getPostText() {
   // Second extraction
   const startIndicator2 = "Updated: ";
   const endIndicator2 = " (GMT";
-  const startIndex2 = htmlContent.indexOf(startIndicator2) + startIndicator2.length;
-  const endIndex2 = htmlContent.indexOf(endIndicator2, startIndex2);
-
-  if (startIndex2 < startIndicator2.length || endIndex2 === -1) {
-    throw new Error('Could not find the target string in the HTML content');
+  let startIndex2 = htmlContent.indexOf(startIndicator2);
+  let endIndex2 = htmlContent.indexOf(endIndicator2, startIndex2 + startIndicator2.length);
+  
+  if (startIndex2 === -1 || endIndex2 === -1) {
+    console.log('Could not find the target string in the HTML content');
+    extractedText2 = "random text";
+  } else {
+    startIndex2 += startIndicator2.length;
+    extractedText2 = htmlContent.slice(startIndex2, endIndex2);
   }
-
-  const extractedText2 = htmlContent.slice(startIndex2, endIndex2);
 
   const date = new Date();
   const options: any = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Jerusalem' };
