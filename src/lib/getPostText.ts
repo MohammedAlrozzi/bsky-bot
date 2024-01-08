@@ -43,20 +43,27 @@ export default async function getPostText() {
   const extractedText = htmlContent.slice(startIndex, endIndex);
 
 
-  const startIndex_2 = htmlContent.indexOf(' Updated: ') + 10; // 4 is the length of ' at '
-  const endIndex_2 = htmlContent.indexOf(' (GMT)', startIndex);
 
-  if (startIndex_2 < 10 || endIndex === -1) {
+
+  const startIndicator = "Updated: ";
+  const endIndicator = " (GMT";
+  const startIndex = htmlContent.indexOf(startIndicator);
+  const endIndex = htmlContent.indexOf(endIndicator);
+  
+  if (startIndex === -1 || endIndex === -1) {
     throw new Error('Could not find the target string in the HTML content');
   }
+  
+  const updatedLast = htmlContent.slice(startIndex + startIndicator.length, endIndex);
 
-  const extractedText_2 = htmlContent.slice(startIndex_2, endIndex_2);
+
+
 
   const date = new Date();
   const options: any = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Jerusalem' };
   const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
 
-  const finalText = `-- ${formattedDate} (Gaza time):\nIsrael killed more than ${extractedText} Palestinians, in the last 3 months alone.\nThis data was last updated ${extractedText_2} GMT`;
+  const finalText = `-- ${formattedDate} (Gaza time):\nIsrael killed more than ${extractedText} Palestinians, in the last 3 months alone.\nLast updated on ${updatedLast} (GMT)`;
 
   return finalText;
 }
