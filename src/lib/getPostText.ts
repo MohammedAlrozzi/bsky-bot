@@ -24,9 +24,6 @@ export default async function getPostText() {
 
   const extractedText = htmlContent.slice(startIndex, endIndex);
 
-
-
-
   const date = new Date();
   const options: any = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Jerusalem' };
   const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
