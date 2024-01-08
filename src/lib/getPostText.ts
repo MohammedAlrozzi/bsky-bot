@@ -43,10 +43,10 @@ export default async function getPostText() {
   const extractedText = htmlContent.slice(startIndex, endIndex);
 
 
-  const startIndex_2 = htmlContent.indexOf(' Updated ') + 9; // 4 is the length of ' at '
+  const startIndex_2 = htmlContent.indexOf(' Updated: ') + 10; // 4 is the length of ' at '
   const endIndex_2 = htmlContent.indexOf(' (GMT)', startIndex);
 
-  if (startIndex < 9 || endIndex === -1) {
+  if (startIndex < 10 || endIndex === -1) {
     throw new Error('Could not find the target string in the HTML content');
   }
 
