@@ -16,11 +16,22 @@ export default async function getPostText() {
   const extractedText = htmlContent.slice(startIndex, endIndex);
 
 
+  const startIndex2 = htmlContent.indexOf('Israel has continued its ') + 25; // 4 is the length of ' at '
+  const endIndex2 = htmlContent.indexOf(' across', startIndex2);
+
+  if (startIndex < 25 || endIndex2 === -1) {
+    throw new Error('Could not find the target string in the HTML content');
+  }
+
+  const extractedText2 = htmlContent.slice(startIndex2, endIndex2);
+
+
+
   const date = new Date();
   const options: any = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Jerusalem' };
   const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
 
-  const finalText = `-- ${formattedDate} (Gaza time):\nIsrael killed more than ${extractedText} Palestinians, in the last 3 months alone.`;
+  const finalText = `-- ${formattedDate} (Gaza time):\nIsrael killed more than ${extractedText} Palestinians, in the last 3 months alone.${extractedText2}`;
 
   return finalText;
 }
