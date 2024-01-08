@@ -47,14 +47,14 @@ export default async function getPostText() {
 
   const startIndicator = "Updated: ";
   const endIndicator = " (GMT";
-  const startIndex = htmlContent.indexOf(startIndicator);
-  const endIndex = htmlContent.indexOf(endIndicator);
+  const startIndex_2 = htmlContent.indexOf(startIndicator);
+  const endIndex_2 = htmlContent.indexOf(endIndicator);
   
-  if (startIndex === -1 || endIndex === -1) {
+  if (startIndex_2 === -1 || endIndex_2 === -1) {
     throw new Error('Could not find the target string in the HTML content');
   }
   
-  const updatedLast = htmlContent.slice(startIndex + startIndicator.length, endIndex);
+  const updatedLast = htmlContent.slice(startIndex_2 + startIndicator.length, endIndex_2);
 
 
 
