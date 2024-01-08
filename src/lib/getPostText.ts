@@ -3,7 +3,11 @@ import axios from 'axios';
 export default async function getPostText() {
   const url = 'https://www.aljazeera.com/news/longform/2023/10/9/israel-hamas-war-in-maps-and-charts-live-tracker';
 
-  const response = await axios.get(url);
+  const response = await axios.get(url, {
+    headers: {
+      'Cache-Control': 'no-cache'
+    }
+  });
   const htmlContent = response.data;
 
   const startIndex = htmlContent.indexOf(' at ') + 4; // 4 is the length of ' at '
