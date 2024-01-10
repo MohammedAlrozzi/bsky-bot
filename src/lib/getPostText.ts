@@ -35,6 +35,7 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 import path from 'path';
 
 export default async function getPostText() {
@@ -58,6 +59,9 @@ export default async function getPostText() {
   }
 
   const extractedText = htmlContent.slice(startIndex, endIndex);
+
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
   const filePath = path.resolve(__dirname, 'lastExtractedText.txt');
 
 let lastExtractedText = '';
