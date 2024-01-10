@@ -1,10 +1,28 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 
+// Implementation of postWithPhoto from previous example
+export function postWithPhoto(text) {
+  const photoUrl = 'https://www.aljazeera.com/wp-content/uploads/2023/10/Interactive-Humanitarian-graphics-all_Jan9_2024-1704811524.jpg?w=770&quality=80';
 
-export default async function getPostText() {
+  const post = {
+    text: text, 
+    attachments: [
+      {
+        type: 'photo',
+        url: photoUrl
+      }
+    ]
+  };
+
+  blueskyPost(post); 
+}
+
+async function generateTextPost() {
+
+  // Existing code to fetch page and extract text
   const url = 'https://www.aljazeera.com/news/longform/2023/10/9/israel-hamas-war-in-maps-and-charts-live-tracker';
-
+  
   const response = await axios.get(url, {
     headers: {
       'Cache-Control': 'no-cache'
@@ -30,5 +48,10 @@ export default async function getPostText() {
 
   const finalText = `${formattedDate} (Gaza time):\n••• Israel killed more than ${extractedText} Palestinians, in the last 3 months alone.\n\nThis data was last updated: ${updateTimeText}.`;
 
-  return finalText;
+
+  // Post with photo
+  postWithPhoto(finalText);
+
 }
+
+generateTextPost();
