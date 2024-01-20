@@ -28,7 +28,13 @@ export default async function getPostText() {
   const options: any = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Jerusalem' };
   const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
 
-  const finalText = `${formattedDate} (Gaza time):\n••• Israel killed more than ${extractedText} Palestinians, in the last 3 months alone.\n\nThis data was last updated: ${updateTimeText}.`;
+  const endDate = new Date(2023, 9, 7); // October is month 9 in JavaScript (0-based)
+  const diffTime = Math.abs(date.getTime() - endDate.getTime());
+  const diffDays = Math.ceil((diffTime / (1000 * 60 * 60 * 24)+1)); // convert milliseconds to days
+
+
+
+  const finalText = `${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide\n••• Israel killed more than ${extractedText} Palestinians, in the last ${diffDays} days alone.\n\nThis data was last updated: ${updateTimeText}.`;
 
   return finalText;
 }
