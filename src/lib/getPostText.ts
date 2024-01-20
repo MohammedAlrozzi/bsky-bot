@@ -36,9 +36,9 @@ export default async function getPostText() {
   now.setHours(0, 0, 0, 0);
   const endDate = new Date(2023, 9, 7); // October is month 9 in JavaScript (0-based)
   const diffTime = Math.abs(now.getTime() - endDate.getTime());
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert milliseconds to days
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)+1); // convert milliseconds to days
 
-  const finalText = `${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide\n••• Israel killed more than ${extractedText} Palestinians, in the last ${diffDays} days alone.\n\nThis data was last updated: ${updateTimeText}.`;
+  const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide\n Israel killed more than ${extractedText} Palestinians, in the last ${diffDays} days alone.\n\nThis data was last updated: ${updateTimeText}.`;
 
   return finalText;
 }
