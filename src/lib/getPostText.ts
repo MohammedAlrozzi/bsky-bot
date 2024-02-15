@@ -78,46 +78,36 @@ postToMastodon(textToPost, accessToken);
 
 
 
-// Set up your Twitter API credentials
-const twitterConfig = {
-  consumer_key: 'WlBTw18oXaaRB7wizCCKYHHtW',
-  consumer_secret: 'UWqXLTECGUSgVllCtQklADLzbIa0q1JeDpF6ENqQoREFoaiVv7',
+
+// Replace 'YOUR_BEARER_TOKEN' with your actual Bearer token obtained from Twitter Developer Portal
+const bearerToken = 'AAAAAAAAAAAAAAAAAAAAALqZrgEAAAAA8LDyGMp27KVyt3TYz9s8fnusR6M%3DVhuy6ITmAqYfDzfsSQc8ySQrPutZUuvgK8syEyMa1q27fq0OSh';
+
+// The URL for the Twitter API endpoint to create a tweet
+const twitterApiUrl = 'https://api.twitter.com/2/tweets';
+
+// The message you want to post
+const message = 'test';
+
+// Set up the request headers
+const headers = {
+  'Authorization': `Bearer ${bearerToken}`,
+  'Content-Type': 'application/json'
 };
 
-// Function to get a bearer token
-const getBearerToken = async () => {
-  const credentials = Buffer.from(`${twitterConfig.consumer_key}:${twitterConfig.consumer_secret}`).toString('base64');
-
-  const response = await axios.post(
-    'https://api.twitter.com/oauth2/token',
-    qs.stringify({ grant_type: 'client_credentials' }),
-    {
-      headers: {
-        Authorization: `Basic ${credentials}`,
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-      },
-    },
-  );
-
-  return response.data.access_token;
+// The data for the tweet
+const postData = {
+  text: message
 };
 
-// Function to get tweets
-const getTweets = async (bearerToken: string, query: string) => {
-  const response = await axios.get(`https://api.twitter.com/1.1/search/tweets.json?q=${query}`, {
-    headers: {
-      Authorization: `Bearer ${bearerToken}`,
-    },
-  });
+// Function to post a tweet
+async function postTweet() {
+  try {
+    const response = await axios.post(twitterApiUrl, postData, { headers: headers });
+    console.log('Tweet posted successfully:', response.data);
+  } catch (error) {
+    console.error('Error posting tweet:', error);
+  }
+}
 
-  console.log(response.data);
-};
-
-// Usage example
-const run = async () => {
-  const bearerToken = await getBearerToken();
-  await getTweets(bearerToken, 'twitter');
-};
-
-run();
-
+// Call the function to post the tweet
+postTweet();
