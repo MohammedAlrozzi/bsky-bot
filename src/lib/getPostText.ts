@@ -80,8 +80,8 @@ postToMastodon(textToPost, accessToken);
 
 // Set up your Twitter API credentials
 const twitterConfig = {
-  consumer_key: 'G3FiLP9lewiNTjULJ3mAiiZ0j',
-  consumer_secret: 'uMP0Dt70ItL6nHg8Lh0EvSf0mvJ8NHlShuM24MXjrZK5EEJewk',
+  consumer_key: 'WlBTw18oXaaRB7wizCCKYHHtW',
+  consumer_secret: 'UWqXLTECGUSgVllCtQklADLzbIa0q1JeDpF6ENqQoREFoaiVv7',
 };
 
 // Function to get a bearer token
