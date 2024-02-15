@@ -66,7 +66,8 @@ async function postToMastodon(text: string, accessToken: string) {
 }
 
 // Usage example
-const textToPost = 'Hello, Mastodon!';
+const finalText = await getPostText();
+const textToPost = finalText;
 const accessToken = 'JGzV_TF-2lAjp67CRqYhOj0xtrLliMWK0WQoy7G5x58';
 
 postToMastodon(textToPost, accessToken);
