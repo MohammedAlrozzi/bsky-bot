@@ -1,6 +1,7 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
-import Twit from 'twit';
+import qs from 'querystring';
+
 
 
 
@@ -76,28 +77,47 @@ postToMastodon(textToPost, accessToken);
 
 
 
+
 // Set up your Twitter API credentials
 const twitterConfig = {
   consumer_key: 'G3FiLP9lewiNTjULJ3mAiiZ0j',
   consumer_secret: 'uMP0Dt70ItL6nHg8Lh0EvSf0mvJ8NHlShuM24MXjrZK5EEJewk',
-  access_token: '243448555-yhGLbbWxvoYy0rXWsdUMxkSGjcjVMNcXBAFEr0Wb',
-  access_token_secret: '3YDXhRxt67UOfJ5wKXHS83nvu6y7TXrB99h3GKdvvPJoe',
 };
 
-// Create a new Twit instance with your credentials
-const twitter = new Twit(twitterConfig);
+// Function to get a bearer token
+const getBearerToken = async () => {
+  const credentials = Buffer.from(`${twitterConfig.consumer_key}:${twitterConfig.consumer_secret}`).toString('base64');
 
-// Function to post a tweet
-const postTweet = (tweet: string) => {
-  twitter.post('statuses/update', { status: tweet }, (err, data, response) => {
-      if (err) {
-          console.error('Error posting tweet:', err);
-      } else {
-          console.log('Tweet posted successfully!');
-      }
+  const response = await axios.post(
+    'https://api.twitter.com/oauth2/token',
+    qs.stringify({ grant_type: 'client_credentials' }),
+    {
+      headers: {
+        Authorization: `Basic ${credentials}`,
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+      },
+    },
+  );
+
+  return response.data.access_token;
+};
+
+// Function to get tweets
+const getTweets = async (bearerToken: string, query: string) => {
+  const response = await axios.get(`https://api.twitter.com/1.1/search/tweets.json?q=${query}`, {
+    headers: {
+      Authorization: `Bearer ${bearerToken}`,
+    },
   });
+
+  console.log(response.data);
 };
 
 // Usage example
-const tweetText = '.';
-postTweet(tweetText);
+const run = async () => {
+  const bearerToken = await getBearerToken();
+  await getTweets(bearerToken, 'twitter');
+};
+
+run();
+
