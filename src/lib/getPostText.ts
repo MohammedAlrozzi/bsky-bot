@@ -60,8 +60,8 @@ async function postToMastodon(text: string, accessToken: string) {
         const response = await axios.post(`${instanceUrl}${endpoint}`, data, { headers });
 
         console.log('Post successful:', response.data);
-    } catch (error) {
-        console.error('Error posting to Mastodon:', error.response.data);
+    } catch (error: any) {
+      console.error('Error posting to Mastodon:', error.response.data);
     }
 }
 
