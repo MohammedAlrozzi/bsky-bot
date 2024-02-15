@@ -1,5 +1,7 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
+import fetch from 'node-fetch';
+import * as crypto from 'crypto';
 
 
 
@@ -74,3 +76,56 @@ const accessToken_Mast = 'JGzV_TF-2lAjp67CRqYhOj0xtrLliMWK0WQoy7G5x58';
 
 postToMastodon(textToPost, accessToken_Mast);
 
+
+
+
+
+
+
+// Set up client credentials
+const clientId = 'QnFnNFBVd29xU1JINkk2UFZwdkk6MTpjaQ';
+const clientSecret = '1QzJfIeJFI5aDXpRGBbU758QKyO1ZvBTes4f3ZlOUneHIwkpXj';
+const redirectUri = 'https://alruzzi.info';
+const scope = 'tweet.write';
+
+// Step 1: Construct an Authorize URL
+const codeVerifier = crypto.randomBytes(64).toString('hex');
+const codeChallenge = crypto.createHash('sha256').update(codeVerifier).digest('base64');
+const state = crypto.randomBytes(16).toString('hex');
+const authorizeUrl = `https://api.twitter.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code&code_challenge=${codeChallenge}&state=${state}`;
+
+// Step 2: Obtain an Authorization Code
+// Handle the redirect and extract the auth_code and state
+
+// Step 3: Exchange Authorization Code for Access Token
+const authCode = 'AAAAAAAAAAAAAAAAAAAAALqZrgEAAAAAW6%2BZTByIk54LCAiyIZhaqKt%2FpQQ%3DvCTWqVkBz6DaKYCP30OJFDdJxIzVtf1LlRvtYYE9EjUGlRxcVo'; // Replace 'YOUR_AUTHORIZATION_CODE' with the actual authorization code
+const tokenParams = new URLSearchParams({
+  client_id: clientId,
+  client_secret: clientSecret,
+  redirect_uri: redirectUri,
+  code: authCode,
+  code_verifier: codeVerifier,
+  grant_type: 'authorization_code'
+});
+
+const tokenResponse = await fetch('https://api.twitter.com/oauth2/token', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  },
+  body: tokenParams
+});
+const { access_token, refresh_token } = await tokenResponse.json();
+
+// Step 4: Create the Tweet
+const tweetText = 'Hello, this is my first Tweet!';
+const tweetResponse = await fetch('https://api.twitter.com/2/tweets', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${access_token}`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ text: tweetText })
+});
+const createdTweet = await tweetResponse.json();
+console.log(createdTweet);
