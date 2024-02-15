@@ -1,5 +1,7 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
+import Twit from 'twit';
+
 
 
 export default async function getPostText() {
@@ -71,3 +73,31 @@ const textToPost = finalText;
 const accessToken = 'JGzV_TF-2lAjp67CRqYhOj0xtrLliMWK0WQoy7G5x58';
 
 postToMastodon(textToPost, accessToken);
+
+
+
+// Set up your Twitter API credentials
+const twitterConfig = {
+  consumer_key: 'G3FiLP9lewiNTjULJ3mAiiZ0j',
+  consumer_secret: 'uMP0Dt70ItL6nHg8Lh0EvSf0mvJ8NHlShuM24MXjrZK5EEJewk',
+  access_token: '243448555-yhGLbbWxvoYy0rXWsdUMxkSGjcjVMNcXBAFEr0Wb',
+  access_token_secret: '3YDXhRxt67UOfJ5wKXHS83nvu6y7TXrB99h3GKdvvPJoe',
+};
+
+// Create a new Twit instance with your credentials
+const twitter = new Twit(twitterConfig);
+
+// Function to post a tweet
+const postTweet = (tweet: string) => {
+  twitter.post('statuses/update', { status: tweet }, (err, data, response) => {
+      if (err) {
+          console.error('Error posting tweet:', err);
+      } else {
+          console.log('Tweet posted successfully!');
+      }
+  });
+};
+
+// Usage example
+const tweetText = '.';
+postTweet(tweetText);
