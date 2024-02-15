@@ -80,7 +80,7 @@ postToMastodon(textToPost, accessToken);
 
 
 // Replace 'YOUR_BEARER_TOKEN' with your actual Bearer token obtained from Twitter Developer Portal
-const bearerToken = 'AAAAAAAAAAAAAAAAAAAAALqZrgEAAAAA8LDyGMp27KVyt3TYz9s8fnusR6M%3DVhuy6ITmAqYfDzfsSQc8ySQrPutZUuvgK8syEyMa1q27fq0OSh';
+const bearerToken = 'AAAAAAAAAAAAAAAAAAAAAGl0nQEAAAAAQ8FML2Tq%2B%2FHcDmIlwQIwxZUaZww%3DF69PCtA8V1jUAucPWjDMqJAsdeaS93tliNNiUy6ft6TPPQXXYC';
 
 // The URL for the Twitter API endpoint to create a tweet
 const twitterApiUrl = 'https://api.twitter.com/2/tweets';
