@@ -1,6 +1,5 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
-import { TwitterApi } from 'twitter-api-v2';
 
 
 
