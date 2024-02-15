@@ -42,7 +42,7 @@
     "fs": "^0.0.1-security",
     "querystring": "^0.2.1",
     "twit": "^1.1.20",
-    "twitter-api-v2": "^1.15.2",
+    "twitter-api-v2": "^1.16.0",
     "twitter-lite": "^1.1.0",
     "zod": "^3.21.4"
   }

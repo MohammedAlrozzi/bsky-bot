@@ -1,6 +1,6 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
-import qs from 'querystring';
+import { TwitterApi } from 'twitter-api-v2';
 
 
 
@@ -71,39 +71,34 @@ async function postToMastodon(text: string, accessToken: string) {
 
 const finalText = await getPostText();
 const textToPost = finalText;
-const accessToken = 'JGzV_TF-2lAjp67CRqYhOj0xtrLliMWK0WQoy7G5x58';
+const accessToken_Mast = 'JGzV_TF-2lAjp67CRqYhOj0xtrLliMWK0WQoy7G5x58';
 
-postToMastodon(textToPost, accessToken);
-
-
+postToMastodon(textToPost, accessToken_Mast);
 
 
 
-// Replace 'YOUR_BEARER_TOKEN' with your actual Bearer token obtained from Twitter Developer Portal
-const bearerToken = 'AAAAAAAAAAAAAAAAAAAAAGl0nQEAAAAAQ8FML2Tq%2B%2FHcDmIlwQIwxZUaZww%3DF69PCtA8V1jUAucPWjDMqJAsdeaS93tliNNiUy6ft6TPPQXXYC';
+// Replace the placeholders with your actual credentials
+const consumerKey = 'mDIH5WBXWnwGaCwhyXIVhW9zE';
+const consumerSecret = 'ZusgBNMIzhm1mk3uSlL4Z5jHm3uIgh9BV4MRH5BgFLZJKGI3ay';
+const accessToken = '243448555-xC2YZUQEH8yuwKZAEgj7wvXjVEi4Oe93sbBemE5J';
+const accessSecret = 'eEdqgN6L2IqcPjTxizyuG6uu6jzIp2K7yCatD0aOS7VcX';
 
-// The URL for the Twitter API endpoint to create a tweet
-const twitterApiUrl = 'https://api.twitter.com/2/tweets';
+// Initialize the Twitter client with your credentials
+const twitterClient = new TwitterApi({
+  appKey: consumerKey,
+  appSecret: consumerSecret,
+  accessToken: accessToken,
+  accessSecret: accessSecret,
+});
 
 // The message you want to post
-const message = 'test';
-
-// Set up the request headers
-const headers = {
-  'Authorization': `Bearer ${bearerToken}`,
-  'Content-Type': 'application/json'
-};
-
-// The data for the tweet
-const postData = {
-  text: message
-};
+const message = '...';
 
 // Function to post a tweet
 async function postTweet() {
   try {
-    const response = await axios.post(twitterApiUrl, postData, { headers: headers });
-    console.log('Tweet posted successfully:', response.data);
+    const response = await twitterClient.v1.tweet(message);
+    console.log('Tweet posted successfully:', response);
   } catch (error) {
     console.error('Error posting tweet:', error);
   }
