@@ -75,34 +75,3 @@ const accessToken_Mast = 'JGzV_TF-2lAjp67CRqYhOj0xtrLliMWK0WQoy7G5x58';
 
 postToMastodon(textToPost, accessToken_Mast);
 
-
-
-// Replace the placeholders with your actual credentials
-const consumerKey = 'mDIH5WBXWnwGaCwhyXIVhW9zE';
-const consumerSecret = 'ZusgBNMIzhm1mk3uSlL4Z5jHm3uIgh9BV4MRH5BgFLZJKGI3ay';
-const accessToken = '243448555-xC2YZUQEH8yuwKZAEgj7wvXjVEi4Oe93sbBemE5J';
-const accessSecret = 'eEdqgN6L2IqcPjTxizyuG6uu6jzIp2K7yCatD0aOS7VcX';
-
-// Initialize the Twitter client with your credentials
-const twitterClient = new TwitterApi({
-  appKey: consumerKey,
-  appSecret: consumerSecret,
-  accessToken: accessToken,
-  accessSecret: accessSecret,
-});
-
-// The message you want to post
-const message = '...';
-
-// Function to post a tweet
-async function postTweet() {
-  try {
-    const response = await twitterClient.v1.tweet(message);
-    console.log('Tweet posted successfully:', response);
-  } catch (error) {
-    console.error('Error posting tweet:', error);
-  }
-}
-
-// Call the function to post the tweet
-postTweet();
