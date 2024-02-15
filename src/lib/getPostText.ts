@@ -43,7 +43,7 @@ export default async function getPostText() {
   return finalText;
 }
 
-
+// posting to Mastodon
 async function postToMastodon(text: string, accessToken: string) {
     try {
         const instanceUrl = 'https://mastodon.social/api/v1';
@@ -65,7 +65,7 @@ async function postToMastodon(text: string, accessToken: string) {
     }
 }
 
-// Usage example
+
 const finalText = await getPostText();
 const textToPost = finalText;
 const accessToken = 'JGzV_TF-2lAjp67CRqYhOj0xtrLliMWK0WQoy7G5x58';
