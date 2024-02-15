@@ -1,8 +1,5 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
-import fetch from 'node-fetch';
-import * as crypto from 'crypto';
-
 
 
 
@@ -75,5 +72,3 @@ const textToPost = finalText;
 const accessToken_Mast = 'JGzV_TF-2lAjp67CRqYhOj0xtrLliMWK0WQoy7G5x58';
 
 postToMastodon(textToPost, accessToken_Mast);
-
-

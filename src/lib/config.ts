@@ -16,9 +16,3 @@ export const bskyAccount: AtpAgentLoginOpts = {
 };
 
 export const bskyService = parsed.BSKY_SERVICE;
-// export const twitterConfig = {
-//   consumer_key: '',
-//   consumer_secret: '',
-//   access_token: '',
-//   access_token_secret: ''
-// };
