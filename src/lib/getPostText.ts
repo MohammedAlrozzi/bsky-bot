@@ -1,8 +1,6 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 
-
-
 export default async function getPostText() {
   const url = 'https://www.aljazeera.com/news/longform/2023/10/9/israel-hamas-war-in-maps-and-charts-live-tracker';
 
@@ -15,34 +13,80 @@ export default async function getPostText() {
   const $ = cheerio.load(htmlContent);
   const updateTimeElement = $('.date-updated__date');
   const updateTimeText = updateTimeElement.text();
-  
-  const startIndex = htmlContent.indexOf(' at ') + 4; // 4 is the length of ' at '
-  const endIndex = htmlContent.indexOf(' Palestinians', startIndex);
 
-  if (startIndex < 4 || endIndex === -1) {
-    throw new Error('Could not find the target string in the HTML content');
+  // Extract the number of killed people in Gaza
+  const gazaKilledMatch = htmlContent.match(/Killed:\s*at\s*least\s*([\d,]+)\s*people\s*,/);
+  const gazaKilled = gazaKilledMatch ? gazaKilledMatch[1] : null;
+
+  // Extract the number of killed people in the West Bank
+  const westBankKilledMatch = htmlContent.match(/Occupied West Bank[\s\S]*?Killed:\s*at\s*least\s*([\d,]+)\s*people/);
+  const westBankKilled = westBankKilledMatch ? westBankKilledMatch[1] : null;
+
+  if (!gazaKilled || !westBankKilled) {
+    throw new Error('Could not find the target numbers in the HTML content');
   }
 
-  const extractedText = htmlContent.slice(startIndex, endIndex);
-
   const date = new Date();
-  const options: any = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Jerusalem' };
+  const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Jerusalem' };
   const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
-
-  // const endDate = new Date(2023, 9, 7); // October is month 9 in JavaScript (0-based)
-  // const diffTime = Math.abs(date.getTime() - endDate.getTime());
-  // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert milliseconds to days
 
   const now = new Date();
   now.setHours(0, 0, 0, 0);
   const endDate = new Date(2023, 9, 7); // October is month 9 in JavaScript (0-based)
   const diffTime = Math.abs(now.getTime() - endDate.getTime());
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)+1); // convert milliseconds to days
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24) + 1); // convert milliseconds to days
 
-  const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${extractedText} Palestinians, in the last ${diffDays} days alone.\n\nThis data was last updated: ${updateTimeText}.`;
+  const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza and ${westBankKilled} in the West Bank, in the last ${diffDays} days.\n\nThis data was last updated: ${updateTimeText}.`;
 
   return finalText;
 }
+
+
+// import axios from 'axios';
+// import cheerio from 'cheerio';
+
+
+
+// export default async function getPostText() {
+//   const url = 'https://www.aljazeera.com/news/longform/2023/10/9/israel-hamas-war-in-maps-and-charts-live-tracker';
+
+//   const response = await axios.get(url, {
+//     headers: {
+//       'Cache-Control': 'no-cache'
+//     }
+//   });
+//   const htmlContent = response.data;
+//   const $ = cheerio.load(htmlContent);
+//   const updateTimeElement = $('.date-updated__date');
+//   const updateTimeText = updateTimeElement.text();
+  
+//   const startIndex = htmlContent.indexOf(' at ') + 4; // 4 is the length of ' at '
+//   const endIndex = htmlContent.indexOf(' Palestinians', startIndex);
+
+//   if (startIndex < 4 || endIndex === -1) {
+//     throw new Error('Could not find the target string in the HTML content');
+//   }
+
+//   const extractedText = htmlContent.slice(startIndex, endIndex);
+
+//   const date = new Date();
+//   const options: any = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Jerusalem' };
+//   const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+
+//   // const endDate = new Date(2023, 9, 7); // October is month 9 in JavaScript (0-based)
+//   // const diffTime = Math.abs(date.getTime() - endDate.getTime());
+//   // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // convert milliseconds to days
+
+//   const now = new Date();
+//   now.setHours(0, 0, 0, 0);
+//   const endDate = new Date(2023, 9, 7); // October is month 9 in JavaScript (0-based)
+//   const diffTime = Math.abs(now.getTime() - endDate.getTime());
+//   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)+1); // convert milliseconds to days
+
+//   const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${extractedText} Palestinians, in the last ${diffDays} days.\n\nThis data was last updated: ${updateTimeText}.`;
+
+//   return finalText;
+// }
 
 // posting to Mastodon
 async function postToMastodon(text: string, accessToken: string) {
