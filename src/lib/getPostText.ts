@@ -27,7 +27,14 @@ export default async function getPostText() {
   }
 
   const date = new Date();
-  const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Jerusalem' };
+  const options: Intl.DateTimeFormatOptions = { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric', 
+    hour: 'numeric', 
+    minute: 'numeric', 
+    timeZone: 'Asia/Jerusalem' 
+  };
   const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
 
   const now = new Date();
@@ -40,6 +47,7 @@ export default async function getPostText() {
 
   return finalText;
 }
+
 
 
 // import axios from 'axios';
