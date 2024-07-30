@@ -47,12 +47,15 @@ export default async function getPostText() {
   function daysToMonths(days: number): number {
     return Math.floor(days / 30);
   }
-  function daysToWeeks(days: number): number {
-    return Math.ceil(days / 7);
+  
+  function remainingDaysToWeeks(days: number): number {
+    const remainingDays = days % 30;
+    return Math.ceil(remainingDays / 7);
   }
+  
   const days = diffDays;
   const months = daysToMonths(days);
-  const weeks = daysToWeeks(days);
+  const weeks = remainingDaysToWeeks(days);
 
 // console.log(`152 days is approximately ${months} months and ${weeks} weeks.`);
   
