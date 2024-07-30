@@ -45,7 +45,7 @@ export default async function getPostText() {
 
 
   function daysToMonths(days: number): number {
-    return Math.floor(days / 30);
+    return Math.ceil(days / 30);
   }
   
   function remainingDaysToWeeks(days: number): number {
@@ -55,9 +55,10 @@ export default async function getPostText() {
   
   const days = diffDays;
   const months = daysToMonths(days);
+  const remainingDays = days % 30;
   const weeks = remainingDaysToWeeks(days);
-
-// console.log(`152 days is approximately ${months} months and ${weeks} weeks.`);
+  
+  // console.log(`298 days is approximately ${months} months.`);
   
 
   const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza and ${westBankKilled} in the West Bank, in the last ${months} months and ${weeks} weeks.\n\nThis data was last updated: ${updateTimeText}.`;
