@@ -42,26 +42,9 @@ export default async function getPostText() {
   const endDate = new Date(2023, 9, 7); // October is month 9 in JavaScript (0-based)
   const diffTime = Math.abs(now.getTime() - endDate.getTime());
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24) + 1); // convert milliseconds to days
-
-
-  function daysToMonths(days: number): number {
-    return Math.ceil(days / 30);
-  }
-  
-  function remainingDaysToWeeks(days: number): number {
-    const remainingDays = days % 30;
-    return Math.ceil(remainingDays / 7);
-  }
-  
-  const days = diffDays;
-  const months = daysToMonths(days);
-  const remainingDays = days % 30;
-  const weeks = remainingDaysToWeeks(days);
-  
-  // console.log(`298 days is approximately ${months} months.`);
   
 
-  const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza and ${westBankKilled} in the West Bank, in the last ${months} months and ${weeks} weeks.\n\nThis data was last updated: ${updateTimeText}.`;
+  const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza and ${westBankKilled} in the West Bank, in the last ${diffDays} days.\n\nThis data was last updated: ${updateTimeText}.`;
 
   return finalText;
 }
