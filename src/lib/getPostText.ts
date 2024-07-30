@@ -43,7 +43,21 @@ export default async function getPostText() {
   const diffTime = Math.abs(now.getTime() - endDate.getTime());
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24) + 1); // convert milliseconds to days
 
-  const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza and ${westBankKilled} in the West Bank, in the last ${diffDays} days.\n\nThis data was last updated: ${updateTimeText}.`;
+
+  function daysToMonths(days: number): number {
+    return Math.floor(days / 30);
+  }
+  function daysToWeeks(days: number): number {
+    return Math.ceil(days / 7);
+  }
+  const days = diffDays;
+  const months = daysToMonths(days);
+  const weeks = daysToWeeks(days);
+
+// console.log(`152 days is approximately ${months} months and ${weeks} weeks.`);
+  
+
+  const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza and ${westBankKilled} in the West Bank, in the last ${months} months and ${weeks} weeks.\n\nThis data was last updated: ${updateTimeText}.`;
 
   return finalText;
 }
