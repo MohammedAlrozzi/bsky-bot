@@ -96,8 +96,6 @@
 
 // //   return finalText;
 // // }
-
-
 import axios from 'axios';
 
 export default async function getPostText() {
@@ -113,33 +111,35 @@ export default async function getPostText() {
   // Assuming the JSON data is an array of reports
   const latestReport = jsonData[jsonData.length - 1]; // Get the latest report
 
-  const gazaKilled = latestReport.ext_killed_cum;
-  // const westBankKilled = latestReport.ext_killed_women_cum; // Assuming this is the West Bank data
+  // Get the report date from the latest report
+  const reportDate = new Date(latestReport.report_date);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Set time to midnight for comparison
 
-  // if (!gazaKilled || !westBankKilled) {
-  //   throw new Error('Could not find the target numbers in the JSON data');
-  // }
+  // Compare report date with today's date
+  if (reportDate.getTime() === today.getTime()) {
+    const gazaKilled = latestReport.ext_killed_cum;
 
-  const date = new Date();
-  const options: Intl.DateTimeFormatOptions = { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric', 
-    hour: 'numeric', 
-    minute: 'numeric', 
-    timeZone: 'Asia/Jerusalem' 
-  };
-  const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+    const options: Intl.DateTimeFormatOptions = { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric', 
+      hour: 'numeric', 
+      minute: 'numeric', 
+      timeZone: 'Asia/Jerusalem' 
+    };
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(today);
 
-  const now = new Date();
-  now.setHours(0, 0, 0, 0);
-  const endDate = new Date(2023, 9, 7); // October is month 9 in JavaScript (0-based)
-  const diffTime = Math.abs(now.getTime() - endDate.getTime());
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24) + 1); // convert milliseconds to days
+    const endDate = new Date(2023, 9, 7); // October is month 9 in JavaScript (0-based)
+    const diffTime = Math.abs(today.getTime() - endDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24) + 1); // convert milliseconds to days
 
-  const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza, in the last ${diffDays} days.\n\nThis data was last updated: ${latestReport.report_date}.`;
+    const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza, in the last ${diffDays} days.\n\nThis data was last updated: ${latestReport.report_date}.`;
 
-  return finalText;
+    return finalText;
+  } else {
+    return "Free Palestine";
+  }
 }
 
 // posting to Mastodon
