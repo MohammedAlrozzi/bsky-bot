@@ -110,7 +110,7 @@ export default async function getPostText() {
 
   // Assuming the JSON data is an array of reports
   const latestReport = jsonData[jsonData.length - 1]; // Get the latest report
-  latestReport['report_date'] = '2024-10-20';
+  latestReport['report_date'] = '2023-10-20';
 
   // Get the report date from the latest report
   const reportDate = new Date(latestReport.report_date);
