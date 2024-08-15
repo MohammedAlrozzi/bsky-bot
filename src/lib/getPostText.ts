@@ -96,6 +96,85 @@
 
 // //   return finalText;
 // // }
+// import axios from 'axios';
+
+// export default async function getPostText() {
+//   const url = 'https://data.techforpalestine.org/api/v2/casualties_daily.min.json'; // Replace with the actual URL of the JSON data
+
+//   const response = await axios.get(url, {
+//     headers: {
+//       'Cache-Control': 'no-cache'
+//     }
+//   });
+//   const jsonData = response.data;
+
+//   // Assuming the JSON data is an array of reports
+//   const latestReport = jsonData[jsonData.length - 1]; // Get the latest report
+
+//   // Get the report date from the latest report
+//   const reportDate = new Date(latestReport.report_date);
+  
+//   const today = new Date();
+//   today.setHours(0, 0, 0, 0); // Set time to midnight for comparison
+  
+  
+//   // Compare report date with today's date
+//   if (reportDate.getTime() === today.getTime()) {
+//     const gazaKilled = latestReport.ext_killed_cum;
+
+//     const options: Intl.DateTimeFormatOptions = { 
+//       year: 'numeric', 
+//       month: 'long', 
+//       day: 'numeric', 
+//       hour: 'numeric', 
+//       minute: 'numeric', 
+//       timeZone: 'Asia/Jerusalem' 
+//     };
+//     const formattedDate = new Intl.DateTimeFormat('en-US', options).format(today);
+
+//     const endDate = new Date(2023, 9, 7); // October is month 9 in JavaScript (0-based)
+//     const diffTime = Math.abs(today.getTime() - endDate.getTime());
+//     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24) + 1); // convert milliseconds to days
+
+//     const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza, in the last ${diffDays} days.\n\nThis data was last updated: ${latestReport.report_date}.`;
+
+//     return finalText;
+//   } else {
+//     return "Free Palestine";
+//   }
+// }
+
+// // posting to Mastodon
+// async function postToMastodon(text: string, accessToken: string) {
+//     try {
+//         const instanceUrl = 'https://mastodon.social/api/v1';
+//         const endpoint = '/statuses';
+
+//         const data = {
+//             status: text,
+//         };
+
+//         const headers = {
+//             Authorization: `Bearer ${accessToken}`,
+//         };
+
+//         const response = await axios.post(`${instanceUrl}${endpoint}`, data, { headers });
+
+//         console.log('Post successful:', response.data);
+//     } catch (error: any) {
+//       console.error('Error posting to Mastodon:', error.response.data);
+//     }
+// }
+
+
+// const finalText = await getPostText();
+// const textToPost = finalText;
+// const accessToken_Mast = 'JGzV_TF-2lAjp67CRqYhOj0xtrLliMWK0WQoy7G5x58';
+
+// postToMastodon(textToPost, accessToken_Mast);
+
+
+
 import axios from 'axios';
 
 export default async function getPostText() {
@@ -108,19 +187,19 @@ export default async function getPostText() {
   });
   const jsonData = response.data;
 
-  // Assuming the JSON data is an array of reports
-  const latestReport = jsonData[jsonData.length - 1]; // Get the latest report
+  // Define the specific date you want to check
+  const specificDate = new Date(2024, 7, 13); // August is month 7 in JavaScript (0-based)
+  specificDate.setHours(0, 0, 0, 0); // Set time to midnight for comparison
 
-  // Get the report date from the latest report
-  const reportDate = new Date(latestReport.report_date);
-  
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); // Set time to midnight for comparison
-  
-  
-  // Compare report date with today's date
-  if (reportDate.getTime() === today.getTime()) {
-    const gazaKilled = latestReport.ext_killed_cum;
+  // Find the report for the specific date
+  const reportForSpecificDate = jsonData.find((report: any) => {
+    const reportDate = new Date(report.report_date);
+    reportDate.setHours(0, 0, 0, 0); // Set time to midnight for comparison
+    return reportDate.getTime() === specificDate.getTime();
+  });
+
+  if (reportForSpecificDate) {
+    const gazaKilled = reportForSpecificDate.ext_killed_cum;
 
     const options: Intl.DateTimeFormatOptions = { 
       year: 'numeric', 
@@ -130,45 +209,16 @@ export default async function getPostText() {
       minute: 'numeric', 
       timeZone: 'Asia/Jerusalem' 
     };
-    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(today);
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(specificDate);
 
     const endDate = new Date(2023, 9, 7); // October is month 9 in JavaScript (0-based)
-    const diffTime = Math.abs(today.getTime() - endDate.getTime());
+    const diffTime = Math.abs(specificDate.getTime() - endDate.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24) + 1); // convert milliseconds to days
 
-    const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza, in the last ${diffDays} days.\n\nThis data was last updated: ${latestReport.report_date}.`;
+    const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza, in the last ${diffDays} days.\n\nThis data was last updated: ${reportForSpecificDate.report_date}.`;
 
     return finalText;
   } else {
-    return "Free Palestine";
+    return "No data available for the specified date.";
   }
 }
-
-// posting to Mastodon
-async function postToMastodon(text: string, accessToken: string) {
-    try {
-        const instanceUrl = 'https://mastodon.social/api/v1';
-        const endpoint = '/statuses';
-
-        const data = {
-            status: text,
-        };
-
-        const headers = {
-            Authorization: `Bearer ${accessToken}`,
-        };
-
-        const response = await axios.post(`${instanceUrl}${endpoint}`, data, { headers });
-
-        console.log('Post successful:', response.data);
-    } catch (error: any) {
-      console.error('Error posting to Mastodon:', error.response.data);
-    }
-}
-
-
-const finalText = await getPostText();
-const textToPost = finalText;
-const accessToken_Mast = 'JGzV_TF-2lAjp67CRqYhOj0xtrLliMWK0WQoy7G5x58';
-
-postToMastodon(textToPost, accessToken_Mast);
