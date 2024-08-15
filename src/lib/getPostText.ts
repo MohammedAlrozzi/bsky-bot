@@ -113,7 +113,8 @@ export default async function getPostText() {
 
   // Get the report date from the latest report
   const reportDate = new Date(latestReport.report_date);
-  const today = new Date();
+  const today = "2024-08-14"
+  // const today = new Date();
   today.setHours(0, 0, 0, 0); // Set time to midnight for comparison
 
   // Compare report date with today's date
