@@ -115,7 +115,6 @@ export default async function getPostText() {
   const reportDate = new Date(latestReport.report_date);
   
   const today = new Date();
-  today.setFullYear(2024, 7, 12); // January is month 0 in JavaScript
   today.setHours(0, 0, 0, 0); // Set time to midnight for comparison
   
   
