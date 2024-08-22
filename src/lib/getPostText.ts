@@ -108,21 +108,28 @@ export default async function getPostText() {
   });
   const jsonData = response.data;
 
-  // Assuming the JSON data is an array of reports
-  const latestReport = jsonData[jsonData.length - 1]; // Get the latest report
+  // Create a map to count occurrences of each report date
+  const dateCountMap = {};
+  jsonData.forEach(report => {
+    const date = report.report_date;
+    dateCountMap[date] = (dateCountMap[date] || 0) + 1;
+  });
 
-  // Get the report date from the latest report
-  const reportDate = new Date(latestReport.report_date);
-  
+  // Find the date with the maximum count
+  const mostReportedDate = Object.keys(dateCountMap).reduce((a, b) => dateCountMap[a] > dateCountMap[b] ? a : b);
+
+  // Find the report corresponding to the most reported date
+  const mostReportedReport = jsonData.find(report => report.report_date === mostReportedDate);
+
+  const reportDate = new Date(mostReportedReport.report_date);
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Set time to midnight for comparison
-  
-  
+
   // Compare report date with today's date
   if (reportDate.getTime() === today.getTime()) {
-    const gazaKilled = latestReport.ext_killed_cum;
+    const gazaKilled = mostReportedReport.ext_killed_cum;
 
-    const options: Intl.DateTimeFormatOptions = { 
+    const options = { 
       year: 'numeric', 
       month: 'long', 
       day: 'numeric', 
@@ -136,14 +143,13 @@ export default async function getPostText() {
     const diffTime = Math.abs(today.getTime() - endDate.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24) + 1); // convert milliseconds to days
 
-    const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza, in the last ${diffDays} days.\n\nThis data was last updated: ${latestReport.report_date}.`;
+    const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza, in the last ${diffDays} days.\n\nThis data was last updated: ${mostReportedReport.report_date}.`;
 
     return finalText;
   } else {
     return "Free Palestine";
   }
 }
-
 // posting to Mastodon
 async function postToMastodon(text: string, accessToken: string) {
     try {
