@@ -132,35 +132,30 @@ export default async function getPostText(): Promise<string> {
     return "No report found for the most reported date.";
   }
 
-  const reportDate = new Date(mostReportedReport.report_date);
+  const gazaKilled = mostReportedReport.ext_killed_cum;
+
+  const options: Intl.DateTimeFormatOptions = { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric', 
+    hour: 'numeric', 
+    minute: 'numeric', 
+    timeZone: 'Asia/Jerusalem' 
+  };
+  const formattedDate = new Intl.DateTimeFormat('en-US', options).format(new Date(mostReportedReport.report_date));
+
+  const endDate = new Date(2023, 9, 7); // October is month 9 in JavaScript (0-based)
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Set time to midnight for comparison
+  const diffTime = Math.abs(today.getTime() - endDate.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24) + 1); // convert milliseconds to days
 
-  // Compare report date with today's date
-  if (reportDate.getTime() === today.getTime()) {
-    const gazaKilled = mostReportedReport.ext_killed_cum;
+  const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza, in the last ${diffDays} days.\n\nThis data was last updated: ${mostReportedReport.report_date}.`;
 
-    const options: Intl.DateTimeFormatOptions = { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric', 
-      hour: 'numeric', 
-      minute: 'numeric', 
-      timeZone: 'Asia/Jerusalem' 
-    };
-    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(today);
-
-    const endDate = new Date(2023, 9, 7); // October is month 9 in JavaScript (0-based)
-    const diffTime = Math.abs(today.getTime() - endDate.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24) + 1); // convert milliseconds to days
-
-    const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza, in the last ${diffDays} days.\n\nThis data was last updated: ${mostReportedReport.report_date}.`;
-
-    return finalText;
-  } else {
-    return "Free Palestine";
-  }
+  return finalText;
 }
+
+
 
 // posting to Mastodon
 async function postToMastodon(text: string, accessToken: string) {
