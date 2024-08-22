@@ -96,12 +96,19 @@
 
 // //   return finalText;
 // // }
+
 import axios from 'axios';
 
-export default async function getPostText() {
-  const url = 'https://data.techforpalestine.org/api/v2/casualties_daily.min.json'; // Replace with the actual URL of the JSON data
+// Define the type for the report data
+interface Report {
+  report_date: string;
+  ext_killed_cum: number;
+}
 
-  const response = await axios.get(url, {
+export default async function getPostText(): Promise<string> {
+  const url = 'https://data.techforpalestine.org/api/v2/casualties_daily.min.json';
+
+  const response = await axios.get<Report[]>(url, {
     headers: {
       'Cache-Control': 'no-cache'
     }
@@ -109,8 +116,8 @@ export default async function getPostText() {
   const jsonData = response.data;
 
   // Create a map to count occurrences of each report date
-  const dateCountMap = {};
-  jsonData.forEach(report => {
+  const dateCountMap: Record<string, number> = {};
+  jsonData.forEach((report: Report) => {
     const date = report.report_date;
     dateCountMap[date] = (dateCountMap[date] || 0) + 1;
   });
@@ -119,7 +126,11 @@ export default async function getPostText() {
   const mostReportedDate = Object.keys(dateCountMap).reduce((a, b) => dateCountMap[a] > dateCountMap[b] ? a : b);
 
   // Find the report corresponding to the most reported date
-  const mostReportedReport = jsonData.find(report => report.report_date === mostReportedDate);
+  const mostReportedReport = jsonData.find((report: Report) => report.report_date === mostReportedDate);
+
+  if (!mostReportedReport) {
+    return "No report found for the most reported date.";
+  }
 
   const reportDate = new Date(mostReportedReport.report_date);
   const today = new Date();
@@ -129,7 +140,7 @@ export default async function getPostText() {
   if (reportDate.getTime() === today.getTime()) {
     const gazaKilled = mostReportedReport.ext_killed_cum;
 
-    const options = { 
+    const options: Intl.DateTimeFormatOptions = { 
       year: 'numeric', 
       month: 'long', 
       day: 'numeric', 
@@ -150,6 +161,7 @@ export default async function getPostText() {
     return "Free Palestine";
   }
 }
+
 // posting to Mastodon
 async function postToMastodon(text: string, accessToken: string) {
     try {
