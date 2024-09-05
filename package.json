@@ -25,6 +25,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/luxon": "^3.4.2",
     "@types/node": "^18.16.2",
     "@types/node-fetch": "^2.6.11",
     "@types/twit": "^2.2.35",
@@ -42,6 +43,7 @@
     "cheerio": "^1.0.0-rc.12",
     "fetch": "^1.1.0",
     "fs": "^0.0.1-security",
+    "luxon": "^3.5.0",
     "prettier": "^3.3.3",
     "querystring": "^0.2.1",
     "twit": "^1.1.20",
