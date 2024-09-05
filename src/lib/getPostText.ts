@@ -27,13 +27,13 @@
 //   }
 
 //   const date = new Date();
-//   const options: Intl.DateTimeFormatOptions = { 
-//     year: 'numeric', 
-//     month: 'long', 
-//     day: 'numeric', 
-//     hour: 'numeric', 
-//     minute: 'numeric', 
-//     timeZone: 'Asia/Jerusalem' 
+//   const options: Intl.DateTimeFormatOptions = {
+//     year: 'numeric',
+//     month: 'long',
+//     day: 'numeric',
+//     hour: 'numeric',
+//     minute: 'numeric',
+//     timeZone: 'Asia/Jerusalem'
 //   };
 //   const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
 
@@ -42,19 +42,14 @@
 //   const endDate = new Date(2023, 9, 7); // October is month 9 in JavaScript (0-based)
 //   const diffTime = Math.abs(now.getTime() - endDate.getTime());
 //   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24) + 1); // convert milliseconds to days
-  
 
 //   const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza and ${westBankKilled} in the West Bank, in the last ${diffDays} days.\n\nThis data was last updated: ${updateTimeText}.`;
 
 //   return finalText;
 // }
 
-
-
 // // import axios from 'axios';
 // // import cheerio from 'cheerio';
-
-
 
 // // export default async function getPostText() {
 // //   const url = 'https://www.aljazeera.com/news/longform/2023/10/9/israel-hamas-war-in-maps-and-charts-live-tracker';
@@ -68,7 +63,7 @@
 // //   const $ = cheerio.load(htmlContent);
 // //   const updateTimeElement = $('.date-updated__date');
 // //   const updateTimeText = updateTimeElement.text();
-  
+
 // //   const startIndex = htmlContent.indexOf(' at ') + 4; // 4 is the length of ' at '
 // //   const endIndex = htmlContent.indexOf(' Palestinians', startIndex);
 
@@ -97,36 +92,94 @@
 // //   return finalText;
 // // }
 
-import axios from 'axios';
+// import axios from 'axios';
 
-// Define the type for the report data
+// // Define the type for the report data
+// interface Report {
+//   report_date: string;
+//   ext_killed_cum: number;
+// }
+
+// export default async function getPostText(): Promise<string> {
+//   const url = 'https://data.techforpalestine.org/api/v2/casualties_daily.min.json';
+
+//   const response = await axios.get<Report[]>(url, {
+//     headers: {
+//       'Cache-Control': 'no-cache'
+//     }
+//   });
+//   const jsonData = response.data;
+
+//   // Create a map to count occurrences of each report date
+//   const dateCountMap: Record<string, number> = {};
+//   jsonData.forEach((report: Report) => {
+//     const date = report.report_date;
+//     dateCountMap[date] = (dateCountMap[date] || 0) + 1;
+//   });
+
+//   // Find the date with the maximum count
+//   const mostReportedDate = Object.keys(dateCountMap).reduce((a, b) => dateCountMap[a] > dateCountMap[b] ? a : b);
+
+//   // Find the report corresponding to the most reported date
+//   const mostReportedReport = jsonData.find((report: Report) => report.report_date === mostReportedDate);
+
+//   if (!mostReportedReport) {
+//     return "No report found for the most reported date.";
+//   }
+
+//   const gazaKilled = mostReportedReport.ext_killed_cum;
+
+//   const options: Intl.DateTimeFormatOptions = {
+//     year: 'numeric',
+//     month: 'long',
+//     day: 'numeric',
+//     hour: 'numeric',
+//     minute: 'numeric',
+//     timeZone: 'Asia/Jerusalem'
+//   };
+//   const formattedDate = new Intl.DateTimeFormat('en-US', options).format(new Date(mostReportedReport.report_date));
+
+//   const endDate = new Date(2023, 9, 7); // October is month 9 in JavaScript (0-based)
+//   const today = new Date();
+//   today.setHours(0, 0, 0, 0); // Set time to midnight for comparison
+//   const diffTime = Math.abs(today.getTime() - endDate.getTime());
+//   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24) + 1); // convert milliseconds to days
+
+//   const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza, in the last ${diffDays} days.\n\nThis data was last updated: ${mostReportedReport.report_date}.`;
+
+//   return finalText;
+// }
+
+import axios from "axios";
+
 interface Report {
   report_date: string;
   ext_killed_cum: number;
 }
 
 export default async function getPostText(): Promise<string> {
-  const url = 'https://data.techforpalestine.org/api/v2/casualties_daily.min.json';
+  const url =
+    "https://data.techforpalestine.org/api/v2/casualties_daily.min.json";
 
   const response = await axios.get<Report[]>(url, {
     headers: {
-      'Cache-Control': 'no-cache'
-    }
+      "Cache-Control": "no-cache",
+    },
   });
   const jsonData = response.data;
 
-  // Create a map to count occurrences of each report date
   const dateCountMap: Record<string, number> = {};
   jsonData.forEach((report: Report) => {
     const date = report.report_date;
     dateCountMap[date] = (dateCountMap[date] || 0) + 1;
   });
 
-  // Find the date with the maximum count
-  const mostReportedDate = Object.keys(dateCountMap).reduce((a, b) => dateCountMap[a] > dateCountMap[b] ? a : b);
-
-  // Find the report corresponding to the most reported date
-  const mostReportedReport = jsonData.find((report: Report) => report.report_date === mostReportedDate);
+  const mostReportedDate = Object.keys(dateCountMap).reduce((a, b) =>
+    dateCountMap[a] > dateCountMap[b] ? a : b,
+  );
+  const mostReportedReport = jsonData.find(
+    (report: Report) => report.report_date === mostReportedDate,
+  );
 
   if (!mostReportedReport) {
     return "No report found for the most reported date.";
@@ -134,20 +187,23 @@ export default async function getPostText(): Promise<string> {
 
   const gazaKilled = mostReportedReport.ext_killed_cum;
 
-  const options: Intl.DateTimeFormatOptions = { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric', 
-    hour: 'numeric', 
-    minute: 'numeric', 
-    timeZone: 'Asia/Jerusalem' 
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    timeZone: "Asia/Jerusalem",
   };
-  const formattedDate = new Intl.DateTimeFormat('en-US', options).format(new Date(mostReportedReport.report_date));
+  const formattedDate = new Intl.DateTimeFormat("en-US", options).format(
+    new Date(mostReportedReport.report_date),
+  );
 
-  const endDate = new Date(2023, 9, 7); // October is month 9 in JavaScript (0-based)
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); // Set time to midnight for comparison
-  const diffTime = Math.abs(today.getTime() - endDate.getTime());
+  // Calculate diffDays based on formattedDate
+  const endDate = new Date(2023, 9, 7); // October 7, 2023
+  const reportDate = new Date(mostReportedReport.report_date);
+  reportDate.setHours(0, 0, 0, 0); // Set time to midnight for comparison
+  const diffTime = Math.abs(reportDate.getTime() - endDate.getTime());
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24) + 1); // convert milliseconds to days
 
   const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza, in the last ${diffDays} days.\n\nThis data was last updated: ${mostReportedReport.report_date}.`;
@@ -155,38 +211,35 @@ export default async function getPostText(): Promise<string> {
   return finalText;
 }
 
-
-
 // posting to Mastodon
 async function postToMastodon(text: string, accessToken: string) {
-    try {
-        const instanceUrl = 'https://mastodon.social/api/v1';
-        const endpoint = '/statuses';
+  try {
+    const instanceUrl = "https://mastodon.social/api/v1";
+    const endpoint = "/statuses";
 
-        const data = {
-            status: text,
-        };
+    const data = {
+      status: text,
+    };
 
-        const headers = {
-            Authorization: `Bearer ${accessToken}`,
-        };
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
 
-        const response = await axios.post(`${instanceUrl}${endpoint}`, data, { headers });
+    const response = await axios.post(`${instanceUrl}${endpoint}`, data, {
+      headers,
+    });
 
-        console.log('Post successful:', response.data);
-    } catch (error: any) {
-      console.error('Error posting to Mastodon:', error.response.data);
-    }
+    console.log("Post successful:", response.data);
+  } catch (error: any) {
+    console.error("Error posting to Mastodon:", error.response.data);
+  }
 }
-
 
 const finalText = await getPostText();
 const textToPost = finalText;
-const accessToken_Mast = 'JGzV_TF-2lAjp67CRqYhOj0xtrLliMWK0WQoy7G5x58';
+const accessToken_Mast = "JGzV_TF-2lAjp67CRqYhOj0xtrLliMWK0WQoy7G5x58";
 
 postToMastodon(textToPost, accessToken_Mast);
-
-
 
 // import axios from 'axios';
 
@@ -214,13 +267,13 @@ postToMastodon(textToPost, accessToken_Mast);
 //   if (reportForSpecificDate) {
 //     const gazaKilled = reportForSpecificDate.ext_killed_cum;
 
-//     const options: Intl.DateTimeFormatOptions = { 
-//       year: 'numeric', 
-//       month: 'long', 
-//       day: 'numeric', 
-//       hour: 'numeric', 
-//       minute: 'numeric', 
-//       timeZone: 'Asia/Jerusalem' 
+//     const options: Intl.DateTimeFormatOptions = {
+//       year: 'numeric',
+//       month: 'long',
+//       day: 'numeric',
+//       hour: 'numeric',
+//       minute: 'numeric',
+//       timeZone: 'Asia/Jerusalem'
 //     };
 //     const formattedDate = new Intl.DateTimeFormat('en-US', options).format(specificDate);
 
