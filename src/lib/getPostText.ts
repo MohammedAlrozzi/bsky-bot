@@ -5,6 +5,7 @@ import { DateTime } from "luxon";
 interface Report {
   report_date: string;
   ext_killed_cum: number;
+  ext_killed_children_cum: number;
 }
 
 export default async function getPostText(): Promise<string> {
@@ -36,6 +37,7 @@ export default async function getPostText(): Promise<string> {
   }
 
   const gazaKilled = mostReportedReport.ext_killed_cum;
+  const childrenKilled = mostReportedReport.ext_killed_children_cum
 
   // Get current date and time in Gaza
   const currentGazaTime = DateTime.now().setZone("Asia/Gaza");
@@ -48,7 +50,7 @@ export default async function getPostText(): Promise<string> {
   );
   const diffDays = Math.ceil(reportDate.diff(endDate, "days").days + 1);
 
-  const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza, in the last ${diffDays} days.\n\nThis data was last updated: ${mostReportedReport.report_date}.(Read more about the figures in the pinned post)`;
+  const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza including ${childrenKilled} children, in the last ${diffDays} days.\n\nThis data was last updated: ${mostReportedReport.report_date}.\n(Read more about the figures in the pinned post)`;
 
   return finalText;
 }
