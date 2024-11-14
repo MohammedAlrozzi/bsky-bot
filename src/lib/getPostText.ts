@@ -48,7 +48,7 @@ export default async function getPostText(): Promise<string> {
   );
   const diffDays = Math.ceil(reportDate.diff(endDate, "days").days + 1);
 
-  const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza, in the last ${diffDays} days.\n\nThis data was last updated: ${mostReportedReport.report_date}.(see the pinned post) and https://alruzzi.info`;
+  const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza, in the last ${diffDays} days.\n\nThis data was last updated: ${mostReportedReport.report_date}.(Read more about the figures here: https://arabcenterdc.org/resource/the-lancet-and-genocide-by-slow-death-in-gaza/)`;
 
   return finalText;
 }
