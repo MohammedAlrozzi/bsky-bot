@@ -120,7 +120,12 @@ export default class Bot {
 
         urlFacets.push({
           index: { byteStart, byteEnd },
-          features: [{ type: "link", uri: url }],
+          features: [
+            {
+              "$type": "app.bsky.richtext.facet#link", // Required $type property
+              uri: url,
+            },
+          ],
         });
       }
 
