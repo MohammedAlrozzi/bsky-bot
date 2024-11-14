@@ -103,7 +103,7 @@ export default class Bot {
     if (typeof text === "string") {
       const richText = new RichText({ text });
       await richText.detectFacets(this.#agent);
-      
+
       // Detect URLs and add them as facets
       const urlRegex = /(https?:\/\/[^\s]+)/g;
       let match;
@@ -113,8 +113,13 @@ export default class Bot {
         const url = match[0];
         const start = match.index;
         const end = start + url.length;
+
+        // Convert character positions to byte positions
+        const byteStart = Buffer.byteLength(text.slice(0, start), "utf-8");
+        const byteEnd = byteStart + Buffer.byteLength(url, "utf-8");
+
         urlFacets.push({
-          index: { start, end },
+          index: { byteStart, byteEnd },
           features: [{ type: "link", uri: url }],
         });
       }
