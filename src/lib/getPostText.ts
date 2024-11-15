@@ -50,7 +50,7 @@ export default async function getPostText(): Promise<string> {
   );
   const diffDays = Math.ceil(reportDate.diff(endDate, "days").days + 1);
 
-  const finalText = `- ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza including ${childrenKilled} children, in the last ${diffDays} days.\n\nThis data was last updated: ${mostReportedReport.report_date}.\n(Read more about the figures in the pinned post)`;
+  const finalText = `&#8227; ${formattedDate} (Gaza time):\nDay ${diffDays} of the Gaza Genocide:\nIsrael killed more than ${gazaKilled} Palestinians in Gaza including ${childrenKilled} children, in the last ${diffDays} days.\n\n&#8227; This data was last updated: ${mostReportedReport.report_date}.\n(Read more about the figures in the pinned post)`;
 
   return finalText;
 }
