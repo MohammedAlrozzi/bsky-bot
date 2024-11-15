@@ -54,8 +54,9 @@ export default async function getPostText(): Promise<string> {
   const finalText = `
   ◆ ${formattedDate} (Gaza time):
       ▪ Day ${diffDays} of the Gaza Genocide:
-      ▪ Israel killed more than ${gazaKilled} Palestinians in Gaza, including ${childrenKilled} children, in the last ${diffDays} days
-  
+      ▪ Israel killed more than ${gazaKilled} Palestinians in Gaza
+      ▪ This includes ${childrenKilled} children
+
   ◆ Last updated: ${mostReportedReport.report_date}
       (Read more about the figures in the pinned post)`;
   return finalText;
